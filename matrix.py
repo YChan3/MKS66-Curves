@@ -9,14 +9,39 @@ z0  z1  ... zn
 """
 import math
 
+'''
+circle: adds a circle to the edge matrix - takes 4 parameters (cx, cy, cz, r)
+hermite: adds a hermite curve to the edge matrix - takes 8 parameters (x0, y0, x1, y1, rx0, ry0, rx1, ry1)
+The curve is between points (x0, y0) and (x1, y1).
+(rx0, ry0) and (rx1, ry1) are the rates of change at each endpoint
+bezier: adds a bezier curve to the edge matrix - takes 8 parameters (x0, y0, x1, y1, x2, y2, x3, y3)
+This curve is drawn between (x0, y0) and (x3, y3)
+(x1, y1) and (x2, y2) are the control points for the curve.
+'''
+
 def make_bezier():
-    pass
+    matrix = new_matrix()
+    matrix[0] = [-1, 3,-3, 1]
+    matrix[1] = [ 3,-6, 3, 0]
+    matrix[2] = [-3, 3, 0, 0]
+    matrix[3] = [ 1, 0, 0, 0]
+    return matrix
 
 def make_hermite():
-    pass
+    matrix = new_matrix()
+    matrix[0] = [2,-3,0,1]
+    matrix[1] = [-2,3,0,0]
+    matrix[2] = [1,-2,1,0]
+    matrix[3] = [1,-1,0,0]
+    return matrix
 
-def generate_curve_coefs( p0, p1, p2, p3, t ):
-    pass
+def generate_curve_coefs( p1, p2, p3, p4, t ):
+	coef = [[p1,p2,p3,p4]]
+	if t == 'bezier':
+		matrix_mult(make_bezier(),coef)
+	elif t == 'hermite':
+		matrix_mult(make_hermite(),coef)
+	return coef[0]
 
 
 def make_translate( x, y, z ):
@@ -70,8 +95,8 @@ def print_matrix( matrix ):
         for c in range( len(matrix) ):
             s+= str(matrix[c][r]) + ' '
         s+= '\n'
-    print s
-    
+    print (s)
+
 #turn the paramter matrix into an identity matrix
 #you may assume matrix is square
 def ident( matrix ):
